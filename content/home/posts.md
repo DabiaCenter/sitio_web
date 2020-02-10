@@ -7,7 +7,7 @@ headless = true  # This file represents a page section.
 active = true  # Activate this widget? true/false
 weight = 60  # Order that this section will appear.
 
-title = "Recent Posts"
+title = "Blog"
 subtitle = ""
 
 [content]
@@ -18,7 +18,7 @@ subtitle = ""
   count = 5
   
   # Choose how many pages you would like to offset by
-  offset = 0
+  offset = 2
 
   # Page order. Descending (desc) or ascending (asc) date.
   order = "desc"
@@ -56,7 +56,7 @@ subtitle = ""
   # image_darken = 0.6  # Darken the image? Range 0-1 where 0 is transparent and 1 is opaque.
 
   # Text color (true=light or false=dark).
-  # text_color_light = true  
+  # text_color_light = light  
   
 [advanced]
  # Custom CSS. 
