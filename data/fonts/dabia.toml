@@ -1,0 +1,15 @@
+# Font style metadata
+name = "dabia"
+
+# Optional Google font URL
+google_fonts = "Noto+Serif|Nunito|Titillium+Web"
+
+# Font families
+heading_font = "Noto Serif"
+body_font = "Nunito"
+nav_font = "Nunito"
+mono_font = "Titillium Web"
+
+# Font size
+font_size = "18"
+font_size_small = "16"
