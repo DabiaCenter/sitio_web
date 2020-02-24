@@ -1,7 +1,7 @@
 ---
 authors:
-- admin
-name: DABIA
+- jurguen
+name: Jurguen
 organizations:
 - name: Instituto Tecnológico de Costa Rica
   url: ""
@@ -20,7 +20,7 @@ social:
   link: https://github.com/gcushen
 superuser: true
 user_groups:
-- Administration
+- Researchers
 ---
 
 
