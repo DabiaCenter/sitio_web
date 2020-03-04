@@ -6,7 +6,7 @@
 widget = "blank"  # See https://sourcethemes.com/academic/docs/page-builder/
 headless = true  # This file represents a page section.
 active = true # Activate this widget? true/false
-weight = 2  # Order that this section will appear.
+weight = 5  # Order that this section will appear.
 
 title = ""
 subtitle = ""
@@ -37,18 +37,16 @@ subtitle = ""
 
 [design.spacing]
   # Customize the section spacing. Order is top, right, bottom, left.
-  padding = ["20px", "0", "20px", "0"]
+  padding = ["40px", "0", "40px", "0"]
 
 [advanced]
  # Custom CSS. 
- css_style = ""
+ css_style = "text-align: center"
  
  # CSS class.
  css_class = "mini"
 +++
 
-Somos una comunidad de interés multidisciplinaria en ciencia de datos, que nació de una idea en el año de 2019, que pretende convertirse en un agente de cambio en Costa Rica mediante la fomentación de la investigación. Dentro de nuestros intereses se encuentra el desarrollo de conocimiento en materia de ingeniería de datos, gobernanza de datos, análisis e inteligencia de negocios de una manera inclusiva, accesible y de igual manera inspiradora para poder ser una comunidad promotora del área de la mano del voluntariado educacional.
+Fomentar la investigación, el voluntariado educacional y el desarrollo de conocimiento sobre la ciencia de datos con aplicación en negocios e ingeniería, a través de una comunidad de interés multidisciplinaria.  
 
-<p align="center">
-  <img width="360" height="200" src="logo.jpg">
-</p>
+

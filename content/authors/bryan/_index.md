@@ -1,7 +1,7 @@
 ---
 authors:
 - felipe
-name: Luis Felipe Carvajal Retana
+name: Bryan Rodríguez Murillo
 organizations:
 - name: Instituto Tecnológico de Costa Rica
   url: ""

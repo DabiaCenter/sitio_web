@@ -1,7 +1,7 @@
 ---
 authors:
 - jurguen
-name: Jurguen
+name: Jurguen André Bermúdez Mora
 organizations:
 - name: Instituto Tecnológico de Costa Rica
   url: ""
@@ -20,7 +20,7 @@ social:
   link: https://github.com/gcushen
 superuser: true
 user_groups:
-- Researchers
+- ""
 ---
 
 

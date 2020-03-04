@@ -1,24 +1,10 @@
 ---
 authors:
 - luis
-education:
-  courses:
-  - course: Baccalaureate Diploma
-    institution: Colegio Nuestra Señora del Pilar
-    year: 2015
-  - course: Lic. Industrial Production Engineering
-    institution: Costa Rica Institute of Technology
-    year: 2020
-email: ""
-interests:
-- Forecasting
-- Business Analytics
-- Machine Learning
 name: Luis Andrés Sandí Corrales
 organizations:
-- name: Costa Rica Institute of Technology
-  url: "https://www.tec.ac.cr/en"
-role: Production Engineering Student
+- name: Instituto Tecnológico de Costa Rica
+  url: "https://www.tec.ac.cr"
 social:
 - icon: twitter
   icon_pack: fab
@@ -35,9 +21,6 @@ social:
 
 superuser: true
 user_groups:
-- Researchers
+- ""
 ---
 
-I am a costa rican student, with this site I want to share some academic opinions about data science, forecasting, business analytics, machine learning and other of my experiences with data.
-
-I enjoy data science, so this site is also a huge oportunity to perform my passion.

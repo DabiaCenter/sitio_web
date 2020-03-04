@@ -1,7 +1,6 @@
 ---
 authors:
-- felipe
-name: Luis Felipe Carvajal Retana
+- a
 organizations:
 - name: Instituto Tecnológico de Costa Rica
   url: ""

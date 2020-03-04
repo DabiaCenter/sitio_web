@@ -14,10 +14,10 @@ subtitle = ""
   # Choose which groups/teams of users to display.
   #   Edit `user_groups` in each user's profile to add them to one or more of these groups.
   user_groups = ["Principal Investigators",
-                 "Researchers",
+                 "Conoce a nuestro equipo",
                  "Grad Students",
                  "Visitors",
-                 "Alumni"]
+                 "Alumni",""]
 
 [design]
   # Show user's social networking links? (true/false)
@@ -44,7 +44,7 @@ subtitle = ""
   # image_darken = 0.6  # Darken the image? Range 0-1 where 0 is transparent and 1 is opaque.
 
   # Text color (true=light or false=dark).
-  # text_color_light = true  
+  # text_color_light = true 
   
 [advanced]
  # Custom CSS. 

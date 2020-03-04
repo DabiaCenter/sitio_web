@@ -1,7 +1,7 @@
 ---
 authors:
-- felipe
-name: Luis Felipe Carvajal Retana
+- alexis
+name: Alexis Andrés Sanabria Castro
 organizations:
 - name: Instituto Tecnológico de Costa Rica
   url: ""
