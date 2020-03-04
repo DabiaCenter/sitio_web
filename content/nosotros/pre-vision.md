@@ -6,9 +6,9 @@
 widget = "blank"  # See https://sourcethemes.com/academic/docs/page-builder/
 headless = true  # This file represents a page section.
 active = true # Activate this widget? true/false
-weight = 2  # Order that this section will appear.
+weight = 6  # Order that this section will appear.
 
-title = ""
+title = "Visión"
 subtitle = ""
 
 [design]
@@ -29,26 +29,20 @@ subtitle = ""
   # gradient_end = "SkyBlue"
   
   # Background image.
-  image = ""  # Name of image in `static/img/`.
-  image_darken = 0.6  # Darken the image? Range 0-1 where 0 is transparent and 1 is opaque.
+  image = "datos.jpg"  # Name of image in `static/img/`.
+  image_darken = 0.3  # Darken the image? Range 0-1 where 0 is transparent and 1 is opaque.
 
   # Text color (true=light or false=dark).
-  text_color_light = false
+  text_color_light = true
 
 [design.spacing]
   # Customize the section spacing. Order is top, right, bottom, left.
-  padding = ["20px", "0", "20px", "0"]
+  padding = ["1px", "0", "1px", "0"]
 
 [advanced]
  # Custom CSS. 
- css_style = ""
+ css_style = "text-align: center"
  
  # CSS class.
- css_class = "mini"
+ css_class = ""
 +++
-
-Somos una comunidad de interés multidisciplinaria en ciencia de datos, que nació de una idea en el año de 2019, que pretende convertirse en un agente de cambio en Costa Rica mediante la fomentación de la investigación. Dentro de nuestros intereses se encuentra el desarrollo de conocimiento en materia de ingeniería de datos, gobernanza de datos, análisis e inteligencia de negocios de una manera inclusiva, accesible y de igual manera inspiradora para poder ser una comunidad promotora del área de la mano del voluntariado educacional.
-
-<p align="center">
-  <img width="360" height="200" src="logo.jpg">
-</p>

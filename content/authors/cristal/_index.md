@@ -1,7 +1,7 @@
 ---
 authors:
 - cristal
-name: Cristal
+name: Cristal Denise Rivera Picado
 organizations:
 - name: Instituto Tecnológico de Costa Rica
   url: ""
@@ -20,7 +20,7 @@ social:
   link: https://github.com/gcushen
 superuser: true
 user_groups:
-- Researchers
+- ""
 ---
 
 

@@ -37,14 +37,14 @@ font_size = "M"
 
 # Local business type (optional)
 # If you entered "LocalBusiness" above, choose the type of business from https://schema.org/LocalBusiness#subtypes
-local_business_type = ""
+local_business_type = "EducationalOrganization"
 
 # Organization name (optional)
 # Enter an organization or project name. Defaults to the site title from `config.toml`.
 org_name = "DABIA"
 
 # Description for social sharing and search engines. If undefined, superuser role is used in place.
-description = ""
+description = "Comunidad de interés impulsora de la ciencia de datos y la inteligencia de negocios"
 
 ############################
 ## Site Features
@@ -71,7 +71,7 @@ privacy_pack = true
 
 # Enable visitors to edit pages?
 #   `repo` defines the repository URL. `editable` defines which page types can be edited.
-edit_page = {repo_url = "https://github.com/gcushen/hugo-academic", content_dir = "", repo_branch = "master", editable = {docs = true, page = false, post = false}}
+# edit_page = {repo_url = "https://github.com/gcushen/hugo-academic", content_dir = "", repo_branch = "master", editable = {docs = true, page = false, post = false}}
 
 ############################
 ## Contact details
@@ -81,7 +81,7 @@ edit_page = {repo_url = "https://github.com/gcushen/hugo-academic", content_dir 
 ############################
 
 # Enter contact details (optional). To hide a field, clear it to "".
-#email = ""
+email = "luisansandico@gmail.com"
 #phone = ""
 
 # Address
@@ -105,10 +105,8 @@ edit_page = {repo_url = "https://github.com/gcushen/hugo-academic", content_dir 
 # Contact links
 #   Set to `[]` to disable, or comment out unwanted lines with a hash `#`.
 contact_links = [
-  {icon = "twitter", icon_pack = "fab", name = "DM Me", link = "https://twitter.com/Twitter"},
-  {icon = "skype", icon_pack = "fab", name = "Skype Me", link = "skype:echo123?call"},
-  {icon = "keybase", icon_pack = "fab", name = "Chat on Keybase", link = "https://keybase.io/"},
-  {icon = "comments", icon_pack = "fas", name = "Discuss on Forum", link = "https://discourse.gohugo.io"},
+  {icon = "twitter", icon_pack = "fab", name = "Visítanos", link = "https://twitter.com/Twitter"},
+  {icon = "github", icon_pack = "fab", name = "Nuestro repositorio de trabajo", link = "https://github.com/DabiaCenter"},
   # {icon = "telegram", icon_pack = "fab", name = "Telegram Me", link = "https://telegram.me/@Telegram"},
   ]
 
@@ -117,7 +115,7 @@ contact_links = [
 ############################
 
 # Default image for social sharing and search engines. Place image in `static/img/` folder and specify image name here.
-sharing_image = ""
+sharing_image = "avatar.jpg"
 
 # Twitter username (without @). Used when a visitor shares your site on Twitter.
 twitter = ""

@@ -7,7 +7,7 @@ weight = 2  # Order that this section will appear.
 
 # Slide interval.
 # Use `false` to disable animation or enter a time in ms, e.g. `5000` (5s).
-interval = 3000
+interval = 4000
 
 # Slide height (optional).
 # E.g. `300px` for 500 pixels or `calc(100vh - 70px)` for full screen.
@@ -15,9 +15,26 @@ height = "500px"
 
 # Slides.
 # Duplicate an `[[item]]` block to add more slides.
+
 [[item]]
   title = "DABIA"
-  content = "Somos un centro dedicado al análisis de datos e inteligencia de negocios"
+  content = "Somos una comunidad de interés multidisciplinaria en ciencia de datos que quiere desarrollar conocimiento accesible para todos."
+  align = "left"
+
+  overlay_color = "#555"  # An HTML color value.
+  overlay_img = "headers/new.jpeg"  # Image path relative to your `static/img/` folder.
+  overlay_filter = 0  # Darken the image. Value in range 0-1.
+  
+  cta_label = "Más acerca de nosotros"
+  cta_url = "/nosotros"
+  cta_icon_pack = ""
+  cta_icon = ""
+
+
+
+[[item]]
+  title = "Áreas de interés"
+  content = "Análisis e inteligencia de negocios, aprendizaje automatizado, ingeniería de datos, gobernanza de datos y más."
   align = "left"  # Choose `center`, `left`, or `right`.
 
   # Overlay a color or image (optional).
@@ -34,18 +51,5 @@ height = "500px"
   cta_icon_pack = ""
   cta_icon = ""
 
-[[item]]
-  title = "DATA"
-  content = "Analizamos y sacamos provecho del nuevo petróleo del siglo XXI"
-  align = "right"
-
-  overlay_color = "#555"  # An HTML color value.
-  overlay_img = "headers/data.jpg"  # Image path relative to your `static/img/` folder.
-  overlay_filter = 0  # Darken the image. Value in range 0-1.
-  
-  cta_label = "Más acerca de nosotros"
-  cta_url = "/nosotros"
-  cta_icon_pack = ""
-  cta_icon = ""
 
 +++
