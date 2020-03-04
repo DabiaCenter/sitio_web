@@ -105,7 +105,7 @@ email = "info@grupodabia.com"
 # Contact links
 #   Set to `[]` to disable, or comment out unwanted lines with a hash `#`.
 contact_links = [
-  {icon = "twitter", icon_pack = "fab", name = "Visítanos", link = "https://twitter.com/Twitter"},
+  {icon = "twitter", icon_pack = "fab", name = "Visítanos", link = "https://twitter.com/grupodabia"},
   {icon = "github", icon_pack = "fab", name = "Nuestro repositorio de trabajo", link = "https://github.com/DabiaCenter"},
   # {icon = "telegram", icon_pack = "fab", name = "Telegram Me", link = "https://telegram.me/@Telegram"},
   ]
