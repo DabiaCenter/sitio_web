@@ -14,7 +14,7 @@
   <p class="powered-by">
     {{ with site.Copyright }}{{ replace . "{year}" now.Year | markdownify}} &middot; {{ end }}
 
-    Website elaborado por el equipo del centro DABIA.
+    Website elaborado por el equipo de DABIA.
 
     {{ if not (in (slice "docs" "updates") .Type) }}
     <span class="float-right" aria-hidden="true">
