@@ -1,0 +1,18 @@
+---
+aliases: [covid19-and-data-science]
+title: ¿Está funcionando el RSS?
+authors: [admin]
+date: '2020-03-14'
+tags: [rss]
+output:
+  blogdown::html_page:
+    toc: true
+    number_sections: false
+    toc_depth: 1
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(eval = FALSE, collapse = TRUE, comment = NA, tidy = FALSE)
+```
+
+Esto corresponde solo a una prueba, saludos. 
