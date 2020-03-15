@@ -1,9 +1,9 @@
 ---
-aliases: [covid19-and-data-science]
-title: ¿Está funcionando el RSS, y el correo es fabuloso?
+aliases: [prueba]
+title: ¿Está sirviendo el RSS de verdad?
 authors: [admin]
 date: '2020-03-14'
-tags: [rss]
+tags: [pruebas]
 output:
   blogdown::html_page:
     toc: true
@@ -15,4 +15,4 @@ output:
 knitr::opts_chunk$set(eval = FALSE, collapse = TRUE, comment = NA, tidy = FALSE)
 ```
 
-Esto corresponde solo a una prueba, saludos, sólo me enviaré el correo a mi. 
+Esto es una simple prueba. Espero que funcione.
