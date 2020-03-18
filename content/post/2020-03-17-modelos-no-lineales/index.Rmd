@@ -1,0 +1,236 @@
+---
+aliases: [modelos-no-lineales]
+title: 'Modelos no lineales. Modelo de regresión polinomial y por segmentos'
+authors: [felipe]
+date: '2020-03-18'
+tags: [modelos]
+output:
+  blogdown::html_page:
+    toc: true
+    number_sections: false
+    toc_depth: 1
+---
+
+```{r include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = NA, tidy = FALSE)
+```
+
+<div style="text-align: justify">
+
+## Modelos de regresión no lineales: polinomial y segmentado
+
+Los casos más típicos en un análisis de datos estadísticos son aquellos en lo que se tiene una variable de respuesta que depende de una(s) variable(s) predictora(s). El modelo más comúnmente conocido y sencillo es el lineal, donde esta relación entre la variable respuesta y predictora se explica mediante una línea recta **sin embargo**, las relaciones entre variables no siempre serán lineales, es más, una relación lineal es difícil de conseguir en muchas ocasiones y puede presentar limitaciones en su capacidad predictiva, ya que la aproximación por linealidad puede llegar a ser muy simple para describir relaciones entre variables en el mundo real. Aquí es donde entran los modelos de regresión **no lineales**.
+
+Un modelo de regresión no lineal es una ecuación que describe la relación no lineal entre la variable respuesta y la variable predictora cuando esta no puede ser formada adecuadamente mediante una relación lineal, es decir, se utilizan cuando los datos no se ajustan a la recta de mejor ajuste tanto como el investigador quisiera, entonces se debe de tomar otras opciones como una relación: logarítmica, exponencial, potencial, polinomial, entre muchas más.
+
+Las características principales de un modelo no lineal son:
+
+1. La variable dependiente y las independientes deben de ser cuantitativas, ya que con variables cualitativas no se puede generar una relación.
+
+2. Si existe una variable categórica se debe de usar variables **Dummy**, las cuales sustituirían las variables categóricas por los números 0 y 1.
+
+3. Elegir el modelo no lineal correcto no es una tarea fácil, en muchos casos se llega al mejor modelo **a prueba y error**.
+
+4. El efecto predictor sobre la respuesta llega a ser **menos intuitivo** que el de un modelo no lineal, es decir no es tan fácil reconocer qué comportamiento va a tener los datos en un modelo no lineal.
+
+5. Es de tener en cuenta que, en un modelo no lineal, la suma de los cuadrados del error residual se calcula diferente que en un modelo lineal, en un modelo no lineal es iterativo y se usan métodos como el de **Gauss Newton y Levenberg-Marquardt**.
+
+## Modelo de regresión polinomial
+
+El modelo de regresión polinomial se utiliza en los casos que los datos ajustan mejor a una curva, ya sea cuadrada, cúbica, de cuarto grado, entre otros. Al agregarle potencias a las variables y agregando estas nuevas variables predictoras, se le está agregando flexibilidad al modelo para que ajuste mejor a los datos. La expresión para una regresión polinomial es la siguiente $y_i=a_1+a_2x+a_3x^2+...+a_nx^n$
+
+Aquí cabe destacar que la funciones como estas se podría considerar no lineal respecto a la variable explicativa x (es una función cuadrática de x), no obstante, es lineal respecto a los parámetros desconocidos (que se conocerán luego de realizar el modelo) como $a_1$, $a_2$, $a_3$ y $a_n$, este es el sentido ¨lineal¨ que existe en el modelo polinomial, que viene como un problema de estimación estadística, entonces aquí es donde en los cálculos computacionales este tipo de regresión se toma como regresión lineal múltiple pero se sigue considerando un modelo no lineal, ya que este modelo no está ajustando los datos a una línea recta.
+
+### Ejemplo
+
+Ahora, para realizar un ejemplo de regresión polinomial se tiene la siguiente data. Esta data representa el tiempo de semanas trabaja por empleado y la cantidad de carros que ha vendido durante ese tiempo.
+
+```{r echo=FALSE}
+venta <- data.frame("Tiempo_trabajo_semanal" = c(168,428,296,392,80,56,352,444,168,200,4,52,20,228,72), 
+                    "Carros_vendidos" = c(272,300,311,365,167,149,366,310,192,229,88,118,62,319,193))
+
+venta
+```
+
+Lo primero que se va a realizar es el **modelo de regresión lineal de los datos** para luego hacer una comparación con el modelo de regresión polinomial. Así que con la función lm() se obtiene:
+
+```{r}
+lineal <- lm(Carros_vendidos ~ Tiempo_trabajo_semanal, 
+             data = venta)
+summary(lineal)
+```
+
+De acuerdo a los valores obtenidos el R cuadrado es de 0.8019, lo que quiere decir que, con el modelo realizado, se está explicando con el modelo realizado el 80% de la varianza, tal valor para un coeficiente de determinación es alto pero, se cree que se puede mejorar, además el error estándar obtenido es de 45.94 y se tiene un valor p de 6.412e-06, lo cual nos muestra que el predictor está relacionado de forma significativa con la variable de respuesta Carros vendidos. Además, se desea realizar un ANOVA para observar la suma total de los cuadrados, la suma de los cuadrados medios del error y el valor p obtenido para identificar si hay significancia del modelo.
+
+```{r}
+anova(lineal)
+```
+
+Se consiguen valores como el total de la suma de los cuadrados que es de **138537**, valor al que se le debe de poner atención, luego se tiene una suma de los cuadrados medios del error de 2111 y un valor p de 6.412e-06, lo cual indica que el modelo si tiene significancia. Igualmente, se decide graficar los datos con su debida recta de mejor ajuste para observar el comportamiento.
+
+```{r}
+library(ggplot2)
+library(ggpmisc)
+
+ggplot(venta, aes(x = Tiempo_trabajo_semanal, y = Carros_vendidos )) + 
+  geom_point(col = "red", show.legend = F) +
+  geom_smooth(method = "lm", formula = y ~ x) +
+  scale_x_continuous(breaks = seq(0, 600, by = 50)) +
+  stat_poly_eq(formula = y ~ x, 
+               aes(label = paste(..eq.label.., ..rr.label.., sep = "~~~")),
+               parse = T)
+```
+
+En el gráfico se puede apreciar la ecuación y el R cuadrado ya obtenido, además se ve la recta de mejor ajuste, pero a simple vista se nota que los datos no ajustan muy bien a la recta, entonces se procede a realizar una gráfica de residuos para prestar atención al comportamiento de los residuos.
+
+```{r}
+library(broom)
+df <- augment(lineal)
+ggplot(df, 
+       aes(x = .fitted, y = .resid)) +
+  geom_point() + geom_hline(yintercept = 0) +
+  xlim(c(0,400)) +
+  ylim(c(-80,80))
+```
+
+Se observa que los residuos no están distribuidos aleatoriamente, también tienen una tendencia a ser curvos, entonces con base en estas dos conclusiones se puede decir que el modelo de regresión lineal no es el adecuado. Así que se decide realizar un modelo de regresión polinomial de segundo grado.
+
+```{r}
+lineal2 <- lm(Carros_vendidos ~ Tiempo_trabajo_semanal +
+                I(Tiempo_trabajo_semanal^2),data = venta)
+summary(lineal2)
+```
+
+Aquí se llega a obtener datos más favorables, como que el R cuadrado es de 0.9075, lo que quiere decir que con respecto al modelo lineal anterior, se logra explicar un 10% más de la variabilidad, asimismo se logra conseguir un error estándar residual menor de 32.68 (lo que indica es que los datos están más cerca a la curva de mejor ajuste) y se tiene un valor p del modelo de regresión polinomial de 6.256e-07 que nos hace ver que al menos una de las variables predictoras tienen relación directa con la variable respuesta; se confirma que las dos tienen relación directa revisando sus valores p individuales de 5.25e-05 y de 0.00303. Se realiza el ANOVA para poder comparar con el modelo anterior y se consigue:
+
+```{r}
+anova(lineal2)
+```
+
+Se logra obtener una suma total de los cuadrados exactamente igual a la del modelo anterior, de 138538, lo que nos hace ver que **elegir un modelo diferente no afecta esta suma total de los cuadrados**. Se puede apreciar que la suma de los cuadrados medios del error disminuyó a 1068, lo cual es prácticamente la mitad con respecto al modelo anterior, esto sucede gracias a que al agregar una variable predictora más se está repartiendo el error entre más variables y por eso el cuadrado medio del error residual baja a la mitad y se llega a obtener una mejor explicación de la varianza con este modelo. Finalmente, de acuerdo con los valores p se observa que las dos variables tienen significancia en el modelo. Ahora, se realiza la gráfica para observar si ya hay un mejor ajuste visualmente.
+
+```{r}
+ggplot(venta, aes(x = Tiempo_trabajo_semanal,
+                  y = Carros_vendidos )) +
+  geom_point(aes(col = "orange"), show.legend = F) + 
+  geom_smooth(method = "lm",
+              formula = y ~ x + I(x^2)) +
+  scale_x_continuous(breaks = seq(0, 600, by = 50)) + 
+  stat_poly_eq(formula = y ~ x + I(x^2),
+               aes(label = paste(..eq.label.., ..rr.label.., sep = "~~~")),
+               parse = T)
+```
+
+En esta gráfica ya se puede considerar un mejor ajuste de los datos con respecto a la curva de mejor ajuste lineal anterior, lo cual ya fue confirmado observando el R cuadrado que es mayor y da una mayor explicación a la varianza en el modelo. Para terminar de afirmar que el modelo de regresión cuadrática es un mejor ajuste se realiza la gráfica de residuos.
+
+```{r}
+library(car)
+df2 <- augment(lineal2)
+residualPlot(lineal2,
+             variable = "fitted",
+             quadratic = T)
+```
+
+El gráfico de residuos nos confirma que estos están teniendo un comportamiento aleatorio, además que la línea nos demuestra que los residuos no están teniendo ninguna tendencia, por lo que se comprueba que con este modelo de regresión polinomial los residuos tienen un mejor comportamiento: dejan de tener la curva que tenían en el modelo anterior.
+
+## Modelo de regresión por segmentos (Piecewise Model)
+
+Con este **Modelo de Regresión por Segmentos** lo que se busca es dividir el rango de la variable predictora en varios subintervalos y generar una recta de mejor ajuste para cada uno de estos subintervalos.
+
+Para poder generar estos segmentos o subintervalos se debe de seleccionar un valor que será llamado **nudo** o **punto de quiebre**, se pueden generar k valores de nudo y deben elegirse en un evento específico que haya sucedido en los datos obtenidos, estos números van a definir los intervalos y a cada uno de estos intervalos se les crea una variable **Dummy**, esta variable va a indicar con 0 los valores que están fuera del intervalo y con 1 los valores que están dentro o si solo se tiene un valor de nudo, con 0 define los valores que están antes de la variable nudo y con 1 los valores que están después.
+
+La expresión para el modelo segmentado con una variable nudo es $y=a+a_1x_1+a_2(x_1-x^k)x_k$
+
+Donde $x^k$ la k no es un exponente, sino una variable nudo escogida y $x_k$ es la variable dummy que le corresponde a ese valor de $x_1$.
+
+Para realizar un ejemplo de este modelo se va a usar unos datos similares a los anteriores, solo que con ciertas modificaciones para que ajuste mejor al modelo
+ 
+```{r}
+dati <- data.frame("Tiempo_trabajo_semanal" = c(168,428,296,503,390,80,56,352,444,482,168,200,4,52,20,225,72,475), "Carros_vendidos" = c(272,300,311,186,365,167,149,366,310,202,192,229,88,118,62,319,193,275))
+dati
+```
+
+Se va a realizar el modelo, pero en esta ocasión se va a utilizar la librería "segmented", la cual trae la función segmented(.), con el fin de realizar el modelo de regresión segmentado de una manera más simple. Los parámetros de esta son el tipo de modelo (en este caso lineal), el al cual se le va a aplicar el nudo o punto de quiebre y cuál o cuáles son los valores nudos o de punto de quiebre. Nosotros vamos a elegir el punto de quiebre de 350, esto porque si se grafican los puntos, parece que en ese valor en específico es donde sucede el cambio rápido de dirección y pudo haber sucedido por un evento en específico como que en esa cantidad de semanas se les sube el salario a los trabajadores o que está comprobado que luego de esa cantidad de semanas el empleado entra a una zona de confort, por estas suposiciones es que se puede elegir el punto de quiebre.
+
+```{r}
+library(segmented)
+modelo <- lm(Carros_vendidos ~ Tiempo_trabajo_semanal, data = dati)
+piece <- segmented(modelo, seg.Z = ~Tiempo_trabajo_semanal, psi = 350)
+summary(piece)
+```
+
+Como se puede observar, se obtiene un valor de R cuadrado bastante alto y bueno, que es de 0.9045 (lo que quiere decir que se está explicando un 90% de la varianza del modelo) un error estándar residual de 31.26 y los valores p obtenidos para cada variable predictora, los cuales son menores a 0.05, lo que indica que estas variables tienen una relación o influencia significativa sobre la variable de respuesta. Por otro lado, se puede sacar la ecuación general con los coeficientes obtenidos, sin embargo,  para lograr crear el gráfico y obtener las dos ecuaciones correspondientes, de una forma más directa, se utiliza la función slope() e intercept().
+
+```{r}
+slope(piece)
+
+intercept(piece)
+```
+
+Las dos ecuaciones serían: $y=0.81285x+90.82$ y $y=-1.5498+976.08$, donde la primera corresponde a la recta de mejor ajuste para los valores anteriores al valor de las 350 semanas y la segunda es la recta de mejor ajuste para los valores luego de las 350 semanas. Ahora con esta información ya se tienen los coeficientes exactos finales para las dos ecuaciones y se puede crear el gráfico correspondiente al modelo.
+
+```{r}
+my.fit <- fitted(piece)
+mymodelo <- data.frame(Tiempo_trabajo_semanal = dati$Tiempo_trabajo_semanal, Carros_vendidos = my.fit)
+
+ggplot(mymodelo, aes(x=Tiempo_trabajo_semanal, y=Carros_vendidos)) + geom_point(alpha = 0.01) + 
+  geom_point(data = dati, aes(x=Tiempo_trabajo_semanal, y=Carros_vendidos)) + 
+  geom_abline(intercept =  90.82, slope = 0.81285, col = "blue") + 
+  geom_abline(intercept = 976.08, slope = -1.5498, col = "blue") + ylim(c(0,450))
+```
+
+Se puede observar en el gráfico cómo las dos rectas calzan bastante bien para los puntos antes de 350 y después de 350, la primera ecuación de pendiente positiva pertenece a la recta del lado izquierdo y esta nos dice el incremento que van teniendo los vendedores antes de cumplir las 350 semanas, es decir, parece que desde la semana 1 de trabajo hasta la 350, el incremento de la venta de carros por vendedor es de 0.81285, en cambio para la segunda ecuación, de pendiente negativa que corresponde a la recta de lado derecho, nos dice que después de las 350 semanas de trabajo, los vendedores empiezan a tener una disminución en las ventas de los carros a razón de 1.5498. Cabe destacar que para un modelo como estos se corre el riesgo de sobre ajustar el modelo a los datos; pero, para casos específicos funciona muy bien y es fácil de interpretar.
+
+### Otro ejemplo para modelo segmentado
+
+Con el ejemplo que se desea mostrar seguidamente, se hace con el fin de enseñar que R puede realizar estos modelos con bases de datos grandes . El dataset trata sobre el salario y otros aspectos de un grupo de hombres de la región del Medio Atlántico y se encuentra en el paquete de R “ISLR”.
+
+```{r}
+library(ISLR)
+head(Wage)
+```
+
+Para este caso se va a utilizar las variables año (age) como variable predictora y el salario (wage) como variable de respuesta.
+
+```{r}
+
+mod <- lm(wage ~ age, data = Wage)
+seg <- segmented(mod, seg.Z = ~age, psi = list(age = c(35,65)))
+summary(seg)
+```
+
+Como se puede apreciar, el modelo para este caso no ajusta para nada bien, tiene un R cuadrado de 0.08688, un R ajustado de 0.08536 y error estándar residual de 39.91. En fin, con el hecho de observar que el R cuadrado es tan bajo se puede concluir que el modelo no ajusta para nada bien y para observar este mal funcionamiento de una manera gráfica se obtiene el siguiente gráfico:
+
+```{r}
+my.fitted <- fitted(seg)
+mimod <- data.frame(age = Wage$age, wage = my.fitted)
+ggplot(mimod, aes(x = age, y = wage)) + geom_point(alpha = 0.01) + 
+  geom_point(data = Wage, aes(x = age, y = wage)) + geom_line(col = "red", size = 1.5)
+```
+
+Se puede apreciar que las rectas siguen una lógica de acuerdo al comportamiento de los datos, pero ya al tener los valores en un gráfico de dispersión se puede determinar que puede que no exista una correlación entre las variables años y salario, lo cual se puede confirmar con la variable de correlación de Spearman.
+
+```{r}
+cor(Wage$age, Wage$wage, method = "spearman")
+```
+
+Se obtiene un valor de correlación excesivamente bajo, de 0.23, donde se puede concluir que la correlación entre estas dos variables es débil o prácticamente inexistente.
+
+## Conclusiones
+
+* Así que se puede mostrar que el mundo no lineal es bastante extenso y tiene mucha aplicabilidad en general, los modelos no lineales llegan a buscar lo mismo que un modelo lineal, una ecuación que explique la relación entre las variables que se tengan.
+
+* Un modelo de regresión polinomial simplemente es agregarle flexibilidad al modelo (elevando a los grados que sean necesarios) la variable predictora con el fin de que se realice una curva que ajuste de manera adecuada a los datos para lograr el objetivo ya mencionado que tiene cualquier tipo de modelo de regresión.
+
+* Asimismo, el modelo de regresión por segmentos lo que hace es crear rectas de mejor ajuste por subintervalos, los cuales fueron definidos por las variables nudo o puntos de quiebre ya pre establecidos, para lograr un mejor ajuste del modelo y se pueda tener una mayor explicación de la varianza de los datos.
+
+* En fin, el mundo de los modelos no lineales es muy extenso y existe un sinfín de diferentes tipos de modelos, así que si sus datos no tienen un comportamiento lineal, al cual estamos muy acostumbrados, existe otro mundo que lo puede llevar a la respuesta para encontrar la función que le haga describir la relación que tiene su variable respuesta con respecto a la(s) variable(s) predictora(s).
+
+
+
+
+
+
+
+
+
