@@ -14,7 +14,7 @@ social:
   link: https://twitter.com/BryanRayanro
 - icon: envelope
   icon_pack: fas
-  link: bryanrodriguezmurillo@outlook.com
+  link: "mailto:bryanrodriguezmurillo@outlook.com"
 - icon: github
   icon_pack: fab
   link: https://github.com/RayanroBryan
