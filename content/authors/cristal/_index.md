@@ -6,9 +6,6 @@ organizations:
 - name: Instituto Tecnológico de Costa Rica
   url: ""
 social:
-- icon: envelope
-  icon_pack: fas
-  link: '#contact'
 - icon: twitter
   icon_pack: fab
   link: https://twitter.com/GeorgeCushen
