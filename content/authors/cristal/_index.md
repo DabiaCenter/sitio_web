@@ -6,6 +6,9 @@ organizations:
 - name: Instituto Tecnológico de Costa Rica
   url: "https://www.tec.ac.cr"
 social:
+- icon: envelope
+  icon_pack: fas
+  link: '#contact'
 - icon: twitter
   icon_pack: fab
   link: https://twitter.com/cristalrivera44
