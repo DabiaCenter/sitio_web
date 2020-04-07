@@ -48,7 +48,7 @@ title = "Rastreador de COVID-19 de Costa Rica"
 #  label = '<a class="js-github-release" href="https://sourcethemes.com/academic/updates" data-repo="gcushen/hugo-academic">Latest release<!-- V --></a>'
 +++
 
-**Datos, gráficos interactivos, mapas dinámicos con líneas de tiempo, modelo SIR y log linear**
+**Datos, gráficos interactivos, mapas dinámicos con líneas de tiempo, modelo SIR y modelo de crecimiento exponencial**
 
 Visita **ahora** el app
 
