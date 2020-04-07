@@ -16,6 +16,23 @@ height = "500px"
 # Slides.
 # Duplicate an `[[item]]` block to add more slides.
 
+
+[[item]]
+  title = "Rastreador COVID-19 Costa Rica"
+  content = "Como comunidad de interés queremos ayudar con nuestros conocimientos al país mediante una aplicación que registra información actualizada del virus COVID-19"
+  
+  align = "left"
+
+  overlay_color = "#555"  # An HTML color value.
+  overlay_img = "headers/covid.jpg"  # Image path relative to your `static/img/` folder.
+  overlay_filter = 0  # Darken the image. Value in range 0-1.
+  
+  cta_label = "Ir al app"
+  cta_url = "https://grupodabia.shinyapps.io/rastreador-covid-19-costa-rica/"
+  cta_icon_pack = "fas"
+  cta_icon = "rocket"
+
+
 [[item]]
   title = "DABIA"
   content = "Somos una comunidad de interés multidisciplinaria en ciencia de datos que quiere desarrollar conocimiento accesible para todos."
