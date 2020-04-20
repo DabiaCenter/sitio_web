@@ -1,0 +1,285 @@
+---
+aliases: [suavizacion-local]
+title: 'Funciones de Suavización local aplicadas a datos de violencia doméstica'
+authors: [bryan]
+date: '2020-04-19'
+tags: [series-de-tiempo]
+output:
+  blogdown::html_page:
+    toc: true
+    number_sections: false
+    toc_depth: 1
+---
+
+```{r include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = NA, tidy = FALSE)
+```
+
+```{r include=FALSE}
+#Librerias requeridas ------
+library(data.table)
+library(readxl)
+library(dplyr)
+library(ggplot2)
+library(zoo)
+library(splines)
+
+#Cargar y preparar los datos ------
+datos <- as.data.table(read_excel("PJCROD_VIOLENCIADOMESTICA_V1.xls")) #Se descargan los datos de la carpeta de trabajo establecida
+
+#View(datos) #Significado de cada variable en https://justiciaabierta.poder-judicial.go.cr/index.php?option=com_sppagebuilder&view=page&id=121
+            
+datos <- datos[, .(Anno, Mes, Entrados)] #Son de interés sólo las variables 1, 2 y 10
+
+#str(datos) #Se observa que todas las variables son de la clase character
+
+datos[, ':='(Entrados = as.integer(Entrados), 
+             Fecha    = as.yearmon(paste(Anno, Mes), "%Y %m"))] #Se cambia la variable Entrados a tipo integer y se crea una variable fecha, uniéndo las dos primeras
+
+datos <- datos[, .(Entrados = sum(Entrados)), by = Fecha][, ':='(Meses = 1:.N)] #Se agregan los datos de casos nuevos por mes y se crea una cuenta de los meses totales
+
+#str(datos)
+```
+
+<div style="text-align: justify">
+
+> La conducta humana puede llegar a ser confusa, más cuando se piensa, por ejemplo, en cuestiones como la violencia. ¿Qué lleva a una persona a agredir a su pareja sentimental? ¿Por qué hay padres que abusan físicamente de sus hijos? Actualmente este tema -el de la violencia doméstica- ha llamado mucho la atención en Costa Rica, debido a la actual pandemia del COVID-19: se prevé que el confinamiento familiar, mezclado con la ansiedad provocada por la crisis, conduzca a un lamentable aumento en casos de violencia doméstica.
+
+Por otro lado, similar a la conducta humana, **un conjunto de datos puede llegar a ser confuso**. Obsérvese el siguiente gráfico que representa la cantidad de nuevos casos de violencia doméstica al mes que se tramitan en el Poder Judicial. 
+
+```{r, echo=FALSE}
+ggplot(datos, mapping = aes(Fecha, Entrados)) +
+  geom_point() +
+  geom_line(color = "red") +
+  labs(title      = "Nuevos casos de violencia doméstica al mes", 
+       caption    = "Fuente: Poder Judicial") + 
+  theme_bw()
+```
+
+Como se observa, estos datos presentan mucho ruido (es decir, mucha variabilidad azarosa, que no guarda relación con el tiempo): ¿Qué lleva a la variable a tomar estos valores? ¿Cómo saber si los datos tienen tendencia o estacionalidad? ¿Qué modelo se podría escoger para representar -e incluso pronosticar- una serie de datos “ruidosos” como esta?
+
+**La Suavización es una técnica de análisis de datos que permite detectar patrones de comportamiento en una serie de datos** (entre otras cosas aplicacione), cuando dichos patrones son desconocidos. Esta información es útil para seleccionar un modelo (por ejemplo: de regresión) que describa y pronostique con cierta exactitud el fenómeno; de lo contrario y sin Suavización, dicho modelo tendría escogerse mediante prueba y error.
+
+La Suavización puede clasificarse en dos grupos: Suavización global y Suavización local. **La presente publicación se centrará en explicar y aplicar las funciones de Suavización local más comunes** en la literatura y la web, las cuáles son:
+
+* Media/mediana móvil
+* Suavización por Kernel o ponderada
+* Regresión local ponderada móvil
+* Suavización por spline
+
+Para aplicar estas funciones, se utilizarán **datos reales sobre violencia doméstica en nuestro país**, los cuáles se extraen directamente de la página web del Poder Judicial de Costa Rica, disponibles en [este enlace](http://datosabiertospj.eastus.cloudapp.azure.com/dataset/violencia-domestica). Los datos se cargan a continuación.
+
+```{r}
+#Se descargan los datos de la carpeta de trabajo establecida
+datos <- as.data.table(read_excel("PJCROD_VIOLENCIADOMESTICA_V1.xls")) 
+
+#Significado de cada variable en https://justiciaabierta.poder-judicial.go.cr/index.php?option=com_sppagebuilder&view=page&id=121
+#View(datos) 
+            
+#Son de interés sólo las variables 1, 2 y 10
+datos <- datos[, .(Anno, Mes, Entrados)] 
+
+#Se observa que todas las variables son de la clase character
+#str(datos)
+
+#Se cambia la variable Entrados a tipo integer y se crea una variable fecha, uniéndo las dos primeras
+datos[, ':='(Entrados = as.integer(Entrados), 
+             Fecha    = as.yearmon(paste(Anno, Mes), "%Y %m"))] 
+
+#Se agregan los datos de casos nuevos por mes y se crea una cuenta de los meses totales
+datos <- datos[, .(Entrados = sum(Entrados)), by = Fecha][, ':='(Meses = 1:.N)] 
+```
+
+
+## ¡Léeme!
+La clase de objeto de R con el que se almacenarán y tratarán los datos se llama data.table, un tipo de data.frame mejorado y que presenta múltiples diferencias en su sintaxis. Si desea aprender sobre data.table y sus ventajas, puede llevar un curso introductorio parcialmente gratuito en [DataCamp.com](https://www.datacamp.com/courses/data-manipulation-in-r-with-datatable) .
+
+## Media móvil
+
+Esta es la función suavizadora más conocida, sencilla y fácil de interpretar. **Consiste en reemplazar cada observación por el promedio de un subconjunto cercano de datos**; debe determinarse el tamaño del subconjunto y cuál observación de este será reemplazada por el promedio (si es centrado o no). 
+
+<div/>
+
+<center>
+
+$M_N=\frac{y_N+y_{N-1}+...+y_2+y_1}{N}= \frac{1}{N} \sum_{i=1}^{N} y_i$
+
+</center>
+
+<div style="text-align: justify">
+
+Esta función se basa en el supuesto de que, dentro subconjunto, la variable dependiente obtiene un valor más o menos constante, por lo que no se debería aplicar media móvil a subconjuntos muy grandes; lo anterior es la razón por la que **esta función un suavizador muy pobre**.
+
+Para los datos en estudio, se aplicará una media móvil con **subconjunto N = 3 meses y centrado** (se reemplaza la observación de cada mes por la media móvil dicho mes, el anterior y el siguiente). Se utiliza la función *rollmean()*, del paquete *data.table*.
+
+```{r, warning=FALSE, message=FALSE}
+subconjunto = 3
+
+datos <- cbind(datos, 
+               datos[, .(MediaMovil = c(NA, rollmean(Entrados, k = subconjunto), NA))])
+
+ggplot(datos, mapping = aes(Fecha)) +
+  geom_point(aes(y = Entrados)) +
+  geom_line(aes(y  = MediaMovil), color = "red") +
+  labs(title       = "Nuevos casos de violencia doméstica al mes",
+       subtitle    = "Suavización por media móvil",
+       caption     = "Fuente: Poder Judicial") + 
+  theme_bw()
+```
+
+La curva obtenida aún resulta **muy poco suave**, de manera que **es difícil apreciar patrones en los datos** más allá de la evidente tendencia al alza. Aparte de esta desventaja, la media móvil puede ser muy afectada por valores atípicos en los datos, siendo la alternativa aplicar *Mediana Móvil*; no obstante, los datos de violencia doméstica no parecen presentar este fenómeno, por lo que **el resultado con mediana móvil no es mejor**.
+
+```{r, warning=FALSE, message=FALSE}
+datos <- cbind(datos, 
+               datos[, .(MedianaMovil = c(NA, rollmedian(Entrados, k = subconjunto), NA))])
+
+ggplot(datos, mapping = aes(Fecha)) +
+  geom_point(aes(y = Entrados)) +
+  geom_line(aes(y  = MedianaMovil), color = "red") +
+  labs(title       = "Nuevos casos de violencia doméstica al mes",
+       subtitle    = "Suavización por mediana móvil",
+       caption     = "Fuente: Poder Judicial") + 
+  theme_bw()
+```
+
+## Suavización por Kernel o ponderada
+Esta función es una versión mejorada de la media móvil y **consiste en dar a cada observación del subconjunto un peso o ponderación**, de manera que las observaciones más cercanas al valor a reemplazar -respecto a x- tendrán mayor peso en el promedio que aquellas más lejanas, debido a esto **la suavización es mayor**.
+
+<div/>
+
+<center>
+
+$\frac{w_N*y_N+w_{N-1}*y_{N-1}+...+w_2*y_2+w_1*y_1}{N}= \frac{1}{N} \sum_{i=1}^{N} w(x_i)y_i$ 
+
+</center>
+
+<div style="text-align: justify">
+
+**Se le llama “Kernel” ya que debe escogerse la distribución de probabilidad según la cual se asignan los pesos** (o en su defecto, se deben establecer los pesos para cada observación del subconjunto); a esto se le llama Kernel, siendo el más usual la Distribución Normal (de ahí que algunos llamen a esta función *Suavización Gaussiana Continua*).
+
+Para el ejemplo en cuestión, se emplea la función *ksmooth*, en la cual se puede especificar en el parámetro *kernel* las opciones *normal* o *box* (**esta última convierte la función en suavización por media móvil**). Con *ksmooth*, los promedios están centrados.
+
+```{r}
+datos <- cbind(datos, 
+               datos[, .(SuavKernel = ksmooth(Meses,
+                                              Entrados, 
+                                              kernel    = "normal", 
+                                              bandwidth = subconjunto,
+                                              n.points  = length(Meses))$y)])
+
+ggplot(datos, mapping = aes(Fecha)) +
+  geom_point(aes(y = Entrados)) +
+  geom_line(aes(y  = SuavKernel), color = "red") +
+  labs(title       = "Nuevos casos de violencia doméstica al mes",
+       subtitle    = "Suavización por kernel",
+       caption     = "Fuente: Poder Judicial") + 
+  theme_bw()
+```
+
+## Regresión local ponderada móvil
+Se le conoce también como Línea móvil, ya que **consiste en aplicar una regresión lineal a las observaciones del subconjunto móvil** -en lugar del cálculo de la media-, de manera que se reemplazan las observación por el resultado de evaluar cada valor de X en cada regresión local.
+
+**Con esta función es posible considerar subconjuntos más amplios**, lo que resulta en una línea más suave.
+
+Se dice que la función *loess()* - *Locally Weighted Least Squares Regression* - **es la función más comúnmente usada por analistas en R para suavizar datos**, debido a su flexibilidad. Además, es una función ponderada; sin embargo, el Kernel que emplea por defecto es no-paramétrico y se llama *Tukey tri-cúbico*.
+
+```{r}
+datos <- cbind(datos, 
+               datos[, .(Regresion  = loess(Entrados ~ Meses,
+                                            degree   = 1)$fitted,
+                       RegresionPeq = loess(Entrados ~ Meses, 
+                                            degree   = 1,
+                                            span     = 0.15)$fitted,
+                       RegresionMed = loess(Entrados ~ Meses, 
+                                            degree   = 1,
+                                            span     = 0.40)$fitted)])
+
+ggplot(datos, mapping = aes(Fecha)) +
+  geom_point(aes(y = Entrados)) +
+  geom_line(aes(y  = RegresionPeq), color = "red") +
+  labs(title       = "Nuevos casos de violencia doméstica al mes",
+       subtitle    = "Suavización por regresión local",
+       caption     = "Fuente: Poder Judicial")+ 
+  theme_bw()
+```
+
+La suavización obtenida para los casos de violencia domestica al mes resulta mejor que con las funciones anteriores. Cabe destacar que el parámetro *span* recibe **el tamaño del subconjunto como un porcentaje del total de observaciones** (el tamaño escogido es arbitrario), de manera que se pueden generar múltiples suavizaciones.
+
+```{r}
+ggplot(datos, mapping = aes(Fecha)) +
+  geom_point(aes(y = Entrados)) +
+  geom_line(aes(y  = RegresionPeq), color = "red") +
+  geom_line(aes(y  = RegresionMed), color = "green") +
+  geom_line(aes(y  = Regresion), color = "blue") +
+  labs(title       = "Nuevos casos de violencia doméstica al mes",
+       subtitle    = "Suavización por regresión local",
+       caption     = "Fuente: Poder Judicial") + 
+  theme_bw() +
+  annotate("text", x = 2016, y = 4150, label = "subconjunto = 0.75", color = "blue") +
+  annotate("text", x = 2016, y = 4500, label = "subconjunto = 0.40", color = "green") +
+  annotate("text", x = 2016, y = 4850, label = "subconjunto = 0.15", color = "red")
+```
+
+## Suavización por spline
+El último método de suavización es totalmente diferente al resto, ya que combina métodos numéricos de *interpolación segmentaria polinomial* y el concepto de *minimización de curvatura*. **Consiste en una función polinómica por partes** (usualmente cúbica), **definida por una serie de nodos unidos suave y continuamente**. Cada polinómio en la función debe cumplir con las siguientes condiciones:
+
+* Tener 1° y 2° derivada, continuas y definidas
+* Minimizar la suma de cuadrados del error
+* Minimizar la curvatura
+
+La segunda y tercera condición se combinan en la siguiente definición matemática:
+
+<div/>
+
+<center>
+
+$minimize:\sum_{i=1}^{N} (y_i-g(x_i))^2 + λ \left(\int_{}^{} g''(x_i)^2 \; dx\right)$
+
+</center>
+
+<div style="text-align: justify">
+
+**Estas condiciones están opuestas entre sí**: mientras que la segunda condición empuja la curva hacia cada dato (*ruido*), la tercera condición intenta que la línea se alise (*suavización*). El equilibrio entre estas condiciones se obtiene mediante el parámetro *lamda*, de manera que el polinomio o “spline” que minimice la expresión será el escogido. 
+
+Cabe enfatizar que se genera un polinomio para cada par de nodos, **por lo que es un suavizador útil cuando los datos originales presentan fuertes cambios de tendencia**. Además, el parámetro lamda puede optimizarse mediante *validación cruzada*.
+
+```{r}
+datos <- cbind(datos, 
+               datos[, .(SuavSpline = smooth.spline(Meses,
+                                                    Entrados,
+                                                    cv = TRUE)$y)])
+
+ggplot(datos, mapping = aes(Fecha)) +
+  geom_point(aes(y = Entrados)) +
+  geom_line(aes(y  = SuavSpline), color = "red") +
+  labs(title       = "Nuevos casos de violencia doméstica al mes",
+       subtitle    = "Suavización por spline",
+       caption     = "Fuente: Poder Judicial") + 
+  theme_bw()
+```
+
+Para el ejemplo sobre violencia doméstica, se emplea la función *smooth.spline* -del paquete *spline*-, indicando con el parámetro *cv = TRUE* que debe optimizarse el parámetro *lamda* por validación cruzada.
+
+## Análisis y conclusiones
+**Con la Suavización por splines se obtuvo la recta más alisada**, de manera que podemos realizar algunas consideraciones sobre el comportamiento de los datos sobre violencia doméstica al mes. 
+
+Es evidente que los datos presentan una lamentable tendencia al alza, por lo que una primera aproximación podría hacerse mediante un modelo de *regresión lineal*; no obstante, **la recta suavizada podría semejarse también a una curva S**, por lo que podrían modelarse estos datos mediante algún *modelo logístico* o de *tendencia amortiguada*. Un comportamiento logístico, por ejemplo, indicaría que -por algún motivo a investigarse- **los casos de violencia doméstica registran un aumento que se desacelera gradualmente** (como lo muestran los últimos meses), por lo que -al menos- la tendencia debía estabilizarse en algún momento. Si los datos se ajustaran con cierta exactitud a un modelo logístico, ¿cuáles serían los motivos detrás del comportamiento descrito?
+
+**La recta suavizada también aparenta presentar estacionalidad**: al observar su comportamiento, pareciera ocurrir un descenso en la cantidad de casos nuevos en los meses previos a enero de cada año. ¿Habrá una causa para esto? Sería recomendable aplicar la técnica de *Descomposición de series de tiempo*, a fin de verificar estos indicios. ¿Qué reflexiones podrían realizar funcionarios del Poder Judicial si resulta que dicha estacionalidad es cierta?
+
+> Como se dijo en un principio, tanto los datos y como los fenómenos detrás de estos pueden ser confusos; a pesar de esto y ante el ejemplo y las funciones desarrolladas, la Suavización se nos presenta como una herramienta muy útil para aproximarnos a las respuestas que buscamos… 
+
+## Addendum
+…pero, eso no es lo único que se puede decir sobre las técnicas de Suavización. Existe un propósito aún más interesante, una aplicación que a hecho de este concepto uno de los más exitosos métodos de análisis de series de tiempo. Se trata de los **Modelos de Pronóstico por Suavización Exponencial**. ¿Deseas enterarte de este tema? No te pierdas la próxima publicación de este servidor 😉.
+
+## Referencias
+
+Irizarry, A. R.(2019). [*Introduction to Data Science: Data Analysis and Prediction Algorithms with R*](https://rafalab.github.io/dsbook/).
+
+Chan, C. (2018). [*Smoothing Time Series Data* ](https://www.r-bloggers.com/smoothing-time-series-data/).
+
+Jennings, C. L., Kulahci, M., & Montgomery, D. C. (2014). *Introduction to time series analysis and forecasting*, Wiley-Blackwell.
+
+Singh, W. A. (30 de junio, 2017). [*Cubic and Smoothing Splines in R*](https://www.centerspace.net/smoothing-cubic-splines)
+
+
