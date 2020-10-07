@@ -107,7 +107,7 @@ email = "info@grupodabia.com"
 contact_links = [
   {icon = "twitter", icon_pack = "fab", name = "Visítanos", link = "https://twitter.com/grupodabia"},
   {icon = "github", icon_pack = "fab", name = "Nuestro repositorio de trabajo", link = "https://github.com/DabiaCenter"},
-  {icon = "slack", icon_pack = "fab", name = "Nuestro repositorio de trabajo", link = "https://t.co/nOtxVYDEeM?amp=1"},
+  {icon = "slack", icon_pack = "fab", name = "Nuestro canal de slack", link = "https://t.co/nOtxVYDEeM?amp=1"},
   # {icon = "telegram", icon_pack = "fab", name = "Telegram Me", link = "https://telegram.me/@Telegram"},
   ]
 
