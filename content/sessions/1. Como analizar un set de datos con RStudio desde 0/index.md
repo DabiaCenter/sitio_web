@@ -17,7 +17,7 @@ tags:
   - tidyverse
 featured: no
 image:
-  caption: '[]("featured.jpg")'
+  caption:
   focal_point: Smart
 projects: []
 links:

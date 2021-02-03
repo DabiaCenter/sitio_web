@@ -14,8 +14,8 @@
   weight = 20
 
 [[main]]
-  name = "COVID-19 CR"
-  url = "covid/"
+  name = "Live Coding Sessions"
+  url = "livecoding/"
   weight = 30
 
 

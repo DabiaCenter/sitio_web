@@ -19,7 +19,7 @@ tags:
   - flexdashboard
 featured: yes
 image:
-  caption: '[](featured.jpg)'
+  caption: 
   focal_point: 'center'
   preview_only: no
 projects: []
