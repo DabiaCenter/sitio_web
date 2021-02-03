@@ -13,6 +13,7 @@ summary: "En esta sesión damos una introducción a flexdashboard, con un ejempl
 date: "2021-02-04T18:00:00Z"
 date_end: "2021-02-04T19:45:00Z"
 all_day: false
+publishdate: "2020-02-02"
 
 tags:
   - R
