@@ -105,10 +105,11 @@ email = "info@grupodabia.com"
 # Contact links
 #   Set to `[]` to disable, or comment out unwanted lines with a hash `#`.
 contact_links = [
-  {icon = "twitter", icon_pack = "fab", name = "Visítanos", link = "https://twitter.com/grupodabia"},
+  {icon = "twitter", icon_pack = "fab", name = "Síguenos en Twitter", link = "https://twitter.com/grupodabia"},
   {icon = "github", icon_pack = "fab", name = "Nuestro repositorio de trabajo", link = "https://github.com/DabiaCenter"},
-  {icon = "slack", icon_pack = "fab", name = "Nuestro canal de slack", link = "https://t.co/nOtxVYDEeM?amp=1"},
-  # {icon = "telegram", icon_pack = "fab", name = "Telegram Me", link = "https://telegram.me/@Telegram"},
+  {icon = "slack", icon_pack = "fab", name = "Nuestro canal de slack", link = "https://join.slack.com/t/dabiaworkspace/shared_invite/zt-lyk3vhqd-GTV7TchmaewcxFn9BvyXGg"},
+  {icon = "youtube", icon_pack = "fab", name = "Nuestro canal de YouTube", link = "https://www.youtube.com/channel/UCHfUdyBhKhrPDMZyqOpKZdg"},
+  #{icon = "linkedin", icon_pack = "fab", name = "Conecta en LinkedIn", link = "https://www.youtube.com/channel/UCHfUdyBhKhrPDMZyqOpKZdg"},
   ]
 
 ############################

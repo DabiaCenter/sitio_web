@@ -11,13 +11,10 @@ social:
   link: https://twitter.com/LSandi_Corrales
 - icon: linkedin
   icon_pack: fab
-  link: https://www.linkedin.com/in/luis-andrés-s-310031180
+  link: https://www.linkedin.com/in/luis-sandi/
 - icon: github
   icon_pack: fab
   link: https://github.com/LSandi
-- icon: globe
-  icon_pack: fas
-  link: https://www.luissandi.com/
 
 superuser: true
 user_groups:
