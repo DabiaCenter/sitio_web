@@ -12,6 +12,9 @@ social:
 - icon: slack
   icon_pack: fab
   link: https://t.co/nOtxVYDEeM?amp=1
+- icon: linkedin
+  icon_pack: fab
+  link: https://cr.linkedin.com/company/grupodabia
 superuser: true
 user_groups:
 - Administration

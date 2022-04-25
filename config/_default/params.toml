@@ -12,7 +12,7 @@
 theme = "dabia"
 
 # Enable users to switch between day and night mode?
-day_night = false
+day_night = true
 
 # Override the theme's font set (optional).
 #   Latest font sets (may require updating): https://sourcethemes.com/academic/themes/
@@ -109,7 +109,7 @@ contact_links = [
   {icon = "github", icon_pack = "fab", name = "Nuestro repositorio de trabajo", link = "https://github.com/DabiaCenter"},
   {icon = "slack", icon_pack = "fab", name = "Nuestro canal de slack", link = "https://join.slack.com/t/dabiaworkspace/shared_invite/zt-lyk3vhqd-GTV7TchmaewcxFn9BvyXGg"},
   {icon = "youtube", icon_pack = "fab", name = "Nuestro canal de YouTube", link = "https://www.youtube.com/channel/UCHfUdyBhKhrPDMZyqOpKZdg"},
-  #{icon = "linkedin", icon_pack = "fab", name = "Conecta en LinkedIn", link = "https://www.youtube.com/channel/UCHfUdyBhKhrPDMZyqOpKZdg"},
+  {icon = "linkedin", icon_pack = "fab", name = "Conecta en LinkedIn", link = "https://cr.linkedin.com/company/grupodabia"},
   ]
 
 ############################
@@ -157,7 +157,7 @@ section_pager = false
 docs_section_pager = true  # Display pager in Docs layout (e.g. tutorials)?
 
 # Enable in-built social sharing buttons? (true/false)
-sharing = false
+sharing = true
 
 # Link authors to their profile page? (true/false)
 link_authors = true

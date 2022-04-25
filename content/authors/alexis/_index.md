@@ -4,7 +4,7 @@ authors:
 name: Alexis Andrés Sanabria Castro
 organizations:
 - name: Instituto Tecnológico de Costa Rica
-  url: ""
+  url: "https://www.tec.ac.cr/"
 social:
 - icon: twitter
   icon_pack: fab

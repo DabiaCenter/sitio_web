@@ -4,7 +4,7 @@ authors:
 name: Luis Felipe Carvajal Retana
 organizations:
 - name: Instituto Tecnológico de Costa Rica
-  url: ""
+  url: "https://www.tec.ac.cr/"
 social:
 - icon: twitter
   icon_pack: fab

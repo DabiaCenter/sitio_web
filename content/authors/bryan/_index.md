@@ -4,7 +4,7 @@ authors:
 name: Bryan Rodríguez Murillo
 organizations:
 - name: Instituto Tecnológico de Costa Rica
-  url: ""
+  url: "https://www.tec.ac.cr/"
 social:
 - icon: linkedin
   icon_pack: fab

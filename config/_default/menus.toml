@@ -14,9 +14,20 @@
   weight = 20
 
 [[main]]
+  name = "Podcast"
+  url = "podcast/"
+  weight = 30
+
+[[main]]
   name = "Live Coding Sessions"
   url = "livecoding/"
-  weight = 30
+  weight = 40
+  
+[[main]]
+  name = "Prensa"
+  url = "prensa/"
+  weight = 50
+  
 
 
 # Link to a PDF of your resume/CV from the menu.
